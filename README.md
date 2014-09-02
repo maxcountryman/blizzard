@@ -34,7 +34,10 @@ When using the standalone server, environment variables provide runtime
 configuration:
 
   BLIZZARD_HOST       - Defaults to localhost.
+
   BLIZZARD_PORT       - Defaults to 3000.
+
   BLIZZARD_MAX_IDS    - The maximum allowed IDs per batch request. Default
                         1000.
+
   BLIZZARD_JETTY_OPTS - Defaults to {:join? true}.
