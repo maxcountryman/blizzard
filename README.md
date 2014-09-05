@@ -4,6 +4,13 @@ A Flake ID generation service provided as a Ring middleware.
 
 ![A blizzard](http://upload.wikimedia.org/wikipedia/commons/0/0d/Blizzard2_-_NOAA.jpg)
 
+## Installation
+`blizzard` is available via [Clojars](https://clojars.org/blizzard):
+
+```clojure
+[blizzard "0.2.0"]
+```
+
 ## Usage
 
 Blizzard may be used either as a standalone HTTP service or as a Ring

@@ -33,6 +33,8 @@
   (:import [java.io ByteArrayOutputStream InputStream])
   (:gen-class))
 
+(def ^{:private true} flake-init (promise))
+
 ;; Helpers
 (defn string->integer
   "Converts s to an integer."
@@ -72,6 +74,11 @@
 (defn ids-response
   "Returns a response with an appropriate number of ids."
   [method max-ids & [{:keys [n] :or {n "1"}}]]
+  ;; Ensure Flake IDs are generated safely!
+  (when-not (realized? flake-init)
+    (flake/init!)
+    (deliver flake-init true))
+
   (when (= method :get)
     (let [n (-> n
                 string->integer

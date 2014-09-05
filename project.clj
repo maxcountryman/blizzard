@@ -1,4 +1,4 @@
-(defproject blizzard "0.1.0-SNAPSHOT"
+(defproject blizzard "0.2.0"
   :description "HTTP Flake ID generate service."
   :url "https://github.com/maxcountryman/blizzard"
   :license {:name "BSD 3-Clause license"
