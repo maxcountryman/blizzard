@@ -73,24 +73,33 @@
 
 (defn ids-response
   "Returns a response with an appropriate number of ids."
-  [method max-ids & [{:keys [n] :or {n "1"}}]]
+  [method max-ids fmt & [{:keys [n] :or {n "1"}}]]
   ;; Ensure Flake IDs are generated safely!
   (when-not (realized? flake-init)
     (flake/init!)
     (deliver flake-init true))
 
   (when (= method :get)
-    (let [n (-> n
-                string->integer
-                n-or-1
-                (n-or-max-ids max-ids))
-          o (transit-write (take-ids n) :json)]
-      {:status  200
+    (let [n         (-> n
+                        string->integer
+                        n-or-1
+                        (n-or-max-ids max-ids))
+          o         (transit-write (take-ids n) fmt)
+          ct-format "application/transit+%s; charset=utf-8"]
+      {:status  201
        :body    (io/input-stream (.toByteArray o))
-       :headers {"Content-Type" "application/transit+json; charset=utf-8"}})))
+       :headers {"Content-Type" (format ct-format (name fmt))}})))
 
 (def method-not-allowed
   {:status 405 :body "Method Not Allowed"})
+
+(defn accept->fmt
+  [accept]
+  (let [formats {"application/x-msgpack" :msgpack
+                 "application/json"      :json}]
+    (if-let [fmt (get formats accept)]
+      fmt
+      :json)))
 
 (defn wrap-flake
   "Middleware that adds two routes to a Ring application:
@@ -101,8 +110,9 @@
   Takes an optional map containing a key max-id, the maximum allowed number
   of keys. Defaults to 1000."
   [handler & [{:keys [max-ids]}]]
-  (fn [{:keys [request-method] :as request}]
-    (let [response (partial ids-response request-method max-ids)]
+  (fn [{:keys [request-method] {:strs [accept]} :headers :as request}]
+    (let [fmt      (accept->fmt accept)
+          response (partial ids-response request-method max-ids fmt)]
       (condp route-matches request
         "/flake"        (or (response)
                             method-not-allowed)
