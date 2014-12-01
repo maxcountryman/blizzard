@@ -10,4 +10,4 @@
                  [ring/ring-json "0.3.1"]
                  [org.clojure/clojure "1.6.0"]]
   :main blizzard.core
-  jvm-opts ^:replace ["-server"])
+  :jvm-opts ^:replace ["-server"])
