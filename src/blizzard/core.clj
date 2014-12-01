@@ -63,9 +63,9 @@
   (repeatedly n flake/generate))
 
 (defn transit-write
-  [data fmt]
   "Writes data with the given fmt (either :json or :msgpack) into a
   ByteArrayOutputStream as transit data. Returns the output stream."
+  [data fmt]
   (let [out    (ByteArrayOutputStream.)
         writer (transit/writer out fmt)]
     (transit/write writer data)
@@ -94,6 +94,8 @@
   {:status 405 :body "Method Not Allowed"})
 
 (defn accept->fmt
+  "Returns a transit format (either :json or :msgpack, defaulting to :json)
+  based on the value of the Accept header."
   [accept]
   (let [formats {"application/x-msgpack" :msgpack
                  "application/json"      :json}]
