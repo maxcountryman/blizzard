@@ -50,7 +50,7 @@
 (defn n-or-1
   "Returns n if n is greater than 0 otherwise 1."
   [n]
-  (if (>= 0 n) 1 n))
+  (if (pos? n) n 1))
 
 (defn n-or-max-ids
   "Returns n if n is equal to or less than max-ids."
