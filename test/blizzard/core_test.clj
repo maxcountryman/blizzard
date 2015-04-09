@@ -1,5 +1,7 @@
 (ns blizzard.core-test
   (:require [clojure.test :refer [deftest is]]
+            [clojure.java.io :as io]
+            [cognitect.transit :as transit]
             [blizzard.core :as blizzard]))
 
 (deftest test-string->integer
@@ -26,4 +28,8 @@
   (let [json (blizzard/transit-write "foo" :json)]
     (is (= (str json) "[\"~#'\",\"foo\"]")))
   (let [json (blizzard/transit-write 42N :json)]
-    (is (= (str json) "[\"~#'\",\"~n42\"]"))))
+    (is (= (str json) "[\"~#'\",\"~n42\"]"))
+    (is (= 42N (-> (.toByteArray json)
+                   io/input-stream
+                   (transit/reader :json)
+                   transit/read)))))
