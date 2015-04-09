@@ -31,9 +31,10 @@ flakes, respectively.
 
 ### Consumers
 
-Note that blizzard produces responses encoded with [transit](https://github.com/cognitect/transit-clj). More specifically, currently blizzard only produces transit byte
-streams encoded with JSON. However, at a later date, blizzard could support
-msgpack via an accepts header.
+Note that blizzard produces responses encoded with [transit](https://github.com/cognitect/transit-clj).
+Either JSON or Msgpack encodings may be produced. By default, JSON is used. To
+request a specific format, specify either application/json or
+application/x-msgpack in the Accept header, for JSON or Msgpack respectively.
 
 ### Environment Variables
 
