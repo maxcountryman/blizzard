@@ -25,7 +25,7 @@
                         1000.
   BLIZZARD_JETTY_OPTS - Defaults to {:join? true}."
   (:require [clojure.java.io      :as io]
-            [clout.core           :refer [route-matches]]
+            [clout.core           :refer [route-compile route-matches]]
             [cognitect.transit    :as transit]
             [flake.core           :as flake]
             [flake.utils          :as utils]
@@ -116,10 +116,8 @@
     (let [fmt      (accept->fmt accept)
           response (partial ids-response request-method max-ids fmt)]
       (condp route-matches request
-        "/flake"        (or (response)
-                            method-not-allowed)
-        "/flake/:n" :>> #(or (response %)
-                             method-not-allowed)
+        (route-compile "/flake")        (or (response) method-not-allowed)
+        (route-compile "/flake/:n") :>> #(or (response %) method-not-allowed)
         (handler request)))))
 
 (defn -main
