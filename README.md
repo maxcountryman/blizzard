@@ -8,7 +8,7 @@ A Flake ID generation service provided as a Ring middleware.
 `blizzard` is available via [Clojars](https://clojars.org/blizzard):
 
 ```clojure
-[blizzard "0.3.0"]
+[blizzard "0.3.1"]
 ```
 
 ## Usage
